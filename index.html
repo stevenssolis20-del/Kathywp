@@ -48,6 +48,8 @@
 
                 <li><a href="#impacto">Impacto</a></li>
 
+                <li><a href="#contacto">Contáctanos</a></li>
+
             </ul>
 
         </nav>
@@ -727,6 +729,50 @@
 
     </section>
 
+    <!-- CONTACTANOS -->
+
+    <section class="contact-section" id="contacto">
+
+        <div class="section-header">
+
+            <span class="section-tag">CONTÁCTANOS</span>
+
+            <h2>Estamos listos para ayudarte</h2>
+
+        </div>
+
+        <div class="contact-grid">
+
+            <article class="contact-card">
+                <h3>Email</h3>
+                <p>
+                    Escríbenos para consultas, pedidos o colaboraciones.
+                </p>
+                <a class="contact-link" href="mailto:info@cacaoconrostro.pe">info@cacaoconrostro.pe</a>
+            </article>
+
+            <article class="contact-card">
+                <h3>WhatsApp</h3>
+                <p>
+                    Envía un mensaje directo y te respondo rápido.
+                </p>
+                <a class="contact-link" href="https://wa.me/51912345678" target="_blank" rel="noreferrer">+51 912 345
+                    678</a>
+            </article>
+
+            <article class="contact-card">
+                <h3>Instagram</h3>
+                <p>
+                    Síguenos y descubre más sobre el cacao amazónico.
+                </p>
+                <a class="contact-link" href="https://www.instagram.com/cacaoconrostro_oficial" target="_blank"
+                    rel="noreferrer">@cacaoconrostro_oficial</a>
+            </article>
+
+        </div>
+
+    </section>
+
     <!-- NEWSLETTER -->
 
     <section class="newsletter">
@@ -804,8 +850,36 @@
         </div>
 
         <button id="finalizeOrder" class="btn-primary cart-finalize" disabled>
-            Finalizar compra
+            Pagar con tarjeta
         </button>
+
+        <div class="payment-form-container" id="paymentFormContainer" hidden>
+            <h3>Pagar con tarjeta</h3>
+            <p>Ingresa tus datos de tarjeta para completar el pago.</p>
+            <form id="paymentForm">
+                <label>
+                    Nombre en la tarjeta
+                    <input type="text" name="cardName" placeholder="Nombre completo" required>
+                </label>
+                <label>
+                    Número de tarjeta
+                    <input type="text" name="cardNumber" inputmode="numeric" maxlength="19"
+                        placeholder="1234 5678 9012 3456" required>
+                </label>
+                <div class="payment-row">
+                    <label>
+                        Expiración
+                        <input type="text" name="cardExpiry" placeholder="MM/AA" required>
+                    </label>
+                    <label>
+                        CVC
+                        <input type="text" name="cardCvc" inputmode="numeric" maxlength="4" placeholder="123" required>
+                    </label>
+                </div>
+                <button type="submit" class="btn-primary">Confirmar pago</button>
+            </form>
+            <div id="paymentResult" class="payment-result"></div>
+        </div>
 
     </div>
 

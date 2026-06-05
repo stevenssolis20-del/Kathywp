@@ -9,6 +9,9 @@ document.addEventListener('DOMContentLoaded', () => {
     const cartCount = document.getElementById('cartCount');
     const cartTotalText = document.getElementById('cartTotalText');
     const finalizeOrder = document.getElementById('finalizeOrder');
+    const paymentFormContainer = document.getElementById('paymentFormContainer');
+    const paymentForm = document.getElementById('paymentForm');
+    const paymentResult = document.getElementById('paymentResult');
     const newsletterForm = document.getElementById('newsletterForm');
     const newsletterMessage = document.getElementById('newsletterMessage');
     const sections = document.querySelectorAll('section');
@@ -35,6 +38,10 @@ document.addEventListener('DOMContentLoaded', () => {
 
         if (finalizeOrder) {
             finalizeOrder.disabled = totalQuantity === 0;
+        }
+
+        if (paymentFormContainer) {
+            paymentFormContainer.hidden = totalQuantity === 0;
         }
     };
 
@@ -189,19 +196,61 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     };
 
-    const handleFinalizeOrder = () => {
+    const showPaymentResult = (message, success) => {
+        if (!paymentResult) {
+            return;
+        }
+
+        paymentResult.textContent = message;
+        paymentResult.classList.toggle('success', success);
+        paymentResult.classList.toggle('error', !success);
+    };
+
+    const openPaymentForm = () => {
+        if (!paymentFormContainer) {
+            return;
+        }
+
+        paymentFormContainer.hidden = false;
+        showPaymentResult('', true);
+        if (cartSidebar) {
+            cartSidebar.scrollTop = cartSidebar.scrollHeight;
+        }
+    };
+
+    const handleFinalizeOrder = (event) => {
+        event.preventDefault();
+
         const items = Object.values(cart);
         if (items.length === 0) {
             return;
         }
 
-        const orderLines = items
-            .map((item) => `${item.quantity}x ${item.name} = ${formatPrice(item.quantity * item.price)}`)
-            .join('%0A');
-        const total = formatPrice(items.reduce((sum, item) => sum + item.quantity * item.price, 0));
-        const subject = 'Pedido%20Cacao%20con%20Rostro';
-        const body = `Quiero%20realizar%20este%20pedido:%0A${orderLines}%0A%0ATotal:%20${encodeURIComponent(total)}`;
-        window.location.href = `mailto:info@cacaoconrostro.pe?subject=${subject}&body=${body}`;
+        openPaymentForm();
+    };
+
+    const handlePaymentSubmit = (event) => {
+        event.preventDefault();
+
+        if (!paymentForm) {
+            return;
+        }
+
+        const cardName = paymentForm.cardName.value.trim();
+        const cardNumber = paymentForm.cardNumber.value.replace(/\s+/g, '');
+        const cardExpiry = paymentForm.cardExpiry.value.trim();
+        const cardCvc = paymentForm.cardCvc.value.trim();
+
+        if (!cardName || cardNumber.length < 12 || !/^\d{3,4}$/.test(cardCvc) || !/^\d{2}\/\d{2}$/.test(cardExpiry)) {
+            showPaymentResult('Por favor completa correctamente los datos de la tarjeta.', false);
+            return;
+        }
+
+        Object.keys(cart).forEach((key) => delete cart[key]);
+        renderCartItems();
+
+        paymentForm.reset();
+        showPaymentResult('Pago con tarjeta simulado realizado. ¡Gracias por tu compra!', true);
     };
 
     const openCart = () => {
@@ -274,6 +323,10 @@ document.addEventListener('DOMContentLoaded', () => {
 
     if (finalizeOrder) {
         finalizeOrder.addEventListener('click', handleFinalizeOrder);
+    }
+
+    if (paymentForm) {
+        paymentForm.addEventListener('submit', handlePaymentSubmit);
     }
 
     if (newsletterForm) {
