@@ -556,6 +556,47 @@ section.visible {
     gap: 80px;
 
     align-items: center;
+
+    position: relative;
+
+    background:
+        linear-gradient(135deg, rgba(255, 255, 255, .95) 0%, rgba(255, 255, 255, .92) 100%),
+        url('images/hojasdecacao.png') right bottom / 400px no-repeat;
+
+    padding: 100px 7%;
+
+    border-radius: 25px;
+
+}
+
+.story-content li.families-stat {
+
+    background: linear-gradient(135deg, #dfba73 0%, #c79f5e 100%);
+
+    color: white;
+
+    padding: 18px 22px;
+
+    border-radius: 15px;
+
+    font-weight: 700;
+
+    margin-top: 20px;
+
+    display: inline-block;
+
+    font-size: 1.1rem;
+
+}
+
+.story-content li.families-stat strong {
+
+    font-size: 1.4rem;
+
+    display: block;
+
+    margin-bottom: 6px;
+
 }
 
 .story-image img {
