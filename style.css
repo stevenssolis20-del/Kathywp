@@ -563,13 +563,11 @@ section.visible {
 
     background-image: url('images/hojasdecacao.png');
 
-    background-position: right center;
+    background-position: center center;
 
-    background-size: 550px auto;
+    background-size: cover;
 
     background-repeat: no-repeat;
-
-    background-attachment: scroll;
 
     padding: 100px 7%;
 
