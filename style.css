@@ -559,9 +559,19 @@ section.visible {
 
     position: relative;
 
-    background:
+    background-color: #faf8f4;
+
+    background-image:
         linear-gradient(135deg, rgba(255, 255, 255, .95) 0%, rgba(255, 255, 255, .92) 100%),
-        url('images/hojasdecacao.png') right bottom / 400px no-repeat;
+        url('images/hojasdecacao.png');
+
+    background-position: center, right bottom;
+
+    background-size: cover, 450px;
+
+    background-repeat: repeat, no-repeat;
+
+    background-attachment: scroll, scroll;
 
     padding: 100px 7%;
 
