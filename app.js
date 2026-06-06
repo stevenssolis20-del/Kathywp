@@ -234,7 +234,7 @@ document.addEventListener('DOMContentLoaded', () => {
             alert('No se pudo iniciar el pago. Intenta de nuevo más tarde.');
             if (finalizeOrder) {
                 finalizeOrder.disabled = false;
-                finalizeOrder.textContent = 'Pagar con tarjeta';
+                finalizeOrder.textContent = 'Finalizar compra';
             }
         }
     };

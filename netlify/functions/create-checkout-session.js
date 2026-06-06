@@ -41,7 +41,8 @@ exports.handler = async (event) => {
         quantity: item.quantity,
     }));
 
-    const baseUrl = process.env.URL || 'http://localhost:8888';
+    const origin = event.headers && event.headers.origin;
+    const baseUrl = origin || process.env.URL || 'http://localhost:8888';
 
     try {
         const session = await stripe.checkout.sessions.create({
