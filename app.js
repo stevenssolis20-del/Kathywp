@@ -9,9 +9,6 @@ document.addEventListener('DOMContentLoaded', () => {
     const cartCount = document.getElementById('cartCount');
     const cartTotalText = document.getElementById('cartTotalText');
     const finalizeOrder = document.getElementById('finalizeOrder');
-    const paymentFormContainer = document.getElementById('paymentFormContainer');
-    const paymentForm = document.getElementById('paymentForm');
-    const paymentResult = document.getElementById('paymentResult');
     const newsletterForm = document.getElementById('newsletterForm');
     const newsletterMessage = document.getElementById('newsletterMessage');
     const sections = document.querySelectorAll('section');
@@ -38,10 +35,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
         if (finalizeOrder) {
             finalizeOrder.disabled = totalQuantity === 0;
-        }
-
-        if (paymentFormContainer) {
-            paymentFormContainer.hidden = totalQuantity === 0;
         }
     };
 
@@ -196,61 +189,54 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     };
 
-    const showPaymentResult = (message, success) => {
-        if (!paymentResult) {
-            return;
+    const getCheckoutCart = () => Object.values(cart).map((item) => ({
+        id: item.id,
+        name: item.name,
+        price: item.price,
+        quantity: item.quantity,
+    }));
+
+    const createCheckoutSession = async (items) => {
+        const response = await fetch('/.netlify/functions/create-checkout-session', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ cart: items }),
+        });
+
+        if (!response.ok) {
+            const errorBody = await response.text();
+            throw new Error(errorBody || 'Error al crear la sesión de pago');
         }
 
-        paymentResult.textContent = message;
-        paymentResult.classList.toggle('success', success);
-        paymentResult.classList.toggle('error', !success);
+        return response.json();
     };
 
-    const openPaymentForm = () => {
-        if (!paymentFormContainer) {
-            return;
-        }
-
-        paymentFormContainer.hidden = false;
-        showPaymentResult('', true);
-        if (cartSidebar) {
-            cartSidebar.scrollTop = cartSidebar.scrollHeight;
-        }
-    };
-
-    const handleFinalizeOrder = (event) => {
+    const handleFinalizeOrder = async (event) => {
         event.preventDefault();
 
-        const items = Object.values(cart);
+        const items = getCheckoutCart();
         if (items.length === 0) {
             return;
         }
 
-        openPaymentForm();
-    };
-
-    const handlePaymentSubmit = (event) => {
-        event.preventDefault();
-
-        if (!paymentForm) {
-            return;
+        if (finalizeOrder) {
+            finalizeOrder.disabled = true;
+            finalizeOrder.textContent = 'Redirigiendo...';
         }
 
-        const cardName = paymentForm.cardName.value.trim();
-        const cardNumber = paymentForm.cardNumber.value.replace(/\s+/g, '');
-        const cardExpiry = paymentForm.cardExpiry.value.trim();
-        const cardCvc = paymentForm.cardCvc.value.trim();
-
-        if (!cardName || cardNumber.length < 12 || !/^\d{3,4}$/.test(cardCvc) || !/^\d{2}\/\d{2}$/.test(cardExpiry)) {
-            showPaymentResult('Por favor completa correctamente los datos de la tarjeta.', false);
-            return;
+        try {
+            const { url } = await createCheckoutSession(items);
+            window.location.href = url;
+        } catch (error) {
+            console.error('Stripe checkout error:', error);
+            alert('No se pudo iniciar el pago. Intenta de nuevo más tarde.');
+            if (finalizeOrder) {
+                finalizeOrder.disabled = false;
+                finalizeOrder.textContent = 'Pagar con tarjeta';
+            }
         }
-
-        Object.keys(cart).forEach((key) => delete cart[key]);
-        renderCartItems();
-
-        paymentForm.reset();
-        showPaymentResult('Pago con tarjeta simulado realizado. ¡Gracias por tu compra!', true);
     };
 
     const openCart = () => {
@@ -323,10 +309,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
     if (finalizeOrder) {
         finalizeOrder.addEventListener('click', handleFinalizeOrder);
-    }
-
-    if (paymentForm) {
-        paymentForm.addEventListener('submit', handlePaymentSubmit);
     }
 
     if (newsletterForm) {

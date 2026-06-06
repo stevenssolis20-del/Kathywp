@@ -850,36 +850,8 @@
         </div>
 
         <button id="finalizeOrder" class="btn-primary cart-finalize" disabled>
-            Pagar con tarjeta
+            Finalizar compra
         </button>
-
-        <div class="payment-form-container" id="paymentFormContainer" hidden>
-            <h3>Pagar con tarjeta</h3>
-            <p>Ingresa tus datos de tarjeta para completar el pago.</p>
-            <form id="paymentForm">
-                <label>
-                    Nombre en la tarjeta
-                    <input type="text" name="cardName" placeholder="Nombre completo" required>
-                </label>
-                <label>
-                    Número de tarjeta
-                    <input type="text" name="cardNumber" inputmode="numeric" maxlength="19"
-                        placeholder="1234 5678 9012 3456" required>
-                </label>
-                <div class="payment-row">
-                    <label>
-                        Expiración
-                        <input type="text" name="cardExpiry" placeholder="MM/AA" required>
-                    </label>
-                    <label>
-                        CVC
-                        <input type="text" name="cardCvc" inputmode="numeric" maxlength="4" placeholder="123" required>
-                    </label>
-                </div>
-                <button type="submit" class="btn-primary">Confirmar pago</button>
-            </form>
-            <div id="paymentResult" class="payment-result"></div>
-        </div>
 
     </div>
 
