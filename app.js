@@ -189,54 +189,96 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     };
 
-    const getCheckoutCart = () => Object.values(cart).map((item) => ({
-        id: item.id,
-        name: item.name,
-        price: item.price,
-        quantity: item.quantity,
-    }));
+    const paymentModal = document.getElementById('paymentModal');
+    const paymentForm = document.getElementById('paymentForm');
+    const closePaymentModal = document.getElementById('closePaymentModal');
+    const successModal = document.getElementById('successModal');
+    const closeSuccessModal = document.getElementById('closeSuccessModal');
 
-    const createCheckoutSession = async (items) => {
-        const response = await fetch('/.netlify/functions/create-checkout-session', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({ cart: items }),
-        });
-
-        if (!response.ok) {
-            const errorBody = await response.text();
-            throw new Error(errorBody || 'Error al crear la sesión de pago');
+    const showPaymentModal = () => {
+        if (paymentModal) {
+            paymentModal.classList.add('show');
         }
-
-        return response.json();
     };
 
-    const handleFinalizeOrder = async (event) => {
+    const hidePaymentModal = () => {
+        if (paymentModal) {
+            paymentModal.classList.remove('show');
+        }
+    };
+
+    const showSuccessModal = (totalAmount) => {
+        if (successModal) {
+            const orderNumber = `#${Math.floor(Math.random() * 1000000)}`;
+            const orderNumberEl = document.getElementById('orderNumber');
+            const successMsg = document.getElementById('successMessage');
+
+            if (orderNumberEl) {
+                orderNumberEl.textContent = orderNumber;
+            }
+
+            if (successMsg) {
+                const items = Object.values(cart);
+                const itemCount = items.reduce((sum, item) => sum + item.quantity, 0);
+                successMsg.textContent = `Tu pedido de ${itemCount} producto(s) por ${formatPrice(totalAmount)} ha sido procesado exitosamente.`;
+            }
+
+            successModal.classList.add('show');
+        }
+    };
+
+    const hideSuccessModal = () => {
+        if (successModal) {
+            successModal.classList.remove('show');
+        }
+    };
+
+    const resetPaymentForm = () => {
+        if (paymentForm) {
+            paymentForm.reset();
+        }
+    };
+
+    const handlePaymentSubmit = (event) => {
         event.preventDefault();
 
-        const items = getCheckoutCart();
+        const items = Object.values(cart);
+        if (items.length === 0) {
+            alert('El carrito está vacío');
+            return;
+        }
+
+        const totalValue = items.reduce((sum, item) => sum + item.quantity * item.price, 0);
+
+        // Calcular el total
+        const formData = new FormData(paymentForm);
+
+        // Simulación de pago exitoso
+        console.log('Pago procesado:', Object.fromEntries(formData));
+
+        hidePaymentModal();
+        showSuccessModal(totalValue);
+
+        // Limpiar carrito después de compra exitosa
+        setTimeout(() => {
+            for (let key in cart) {
+                delete cart[key];
+            }
+            renderCartItems();
+            closeCartSidebar();
+            resetPaymentForm();
+        }, 2000);
+    };
+
+    const handleFinalizeOrder = (event) => {
+        event.preventDefault();
+
+        const items = Object.values(cart);
         if (items.length === 0) {
             return;
         }
 
-        if (finalizeOrder) {
-            finalizeOrder.disabled = true;
-            finalizeOrder.textContent = 'Redirigiendo...';
-        }
-
-        try {
-            const { url } = await createCheckoutSession(items);
-            window.location.href = url;
-        } catch (error) {
-            console.error('Stripe checkout error:', error);
-            alert('No se pudo iniciar el pago. Intenta de nuevo más tarde.');
-            if (finalizeOrder) {
-                finalizeOrder.disabled = false;
-                finalizeOrder.textContent = 'Finalizar compra';
-            }
-        }
+        showPaymentModal();
     };
 
     const openCart = () => {
@@ -309,6 +351,21 @@ document.addEventListener('DOMContentLoaded', () => {
 
     if (finalizeOrder) {
         finalizeOrder.addEventListener('click', handleFinalizeOrder);
+    }
+
+    if (paymentForm) {
+        paymentForm.addEventListener('submit', handlePaymentSubmit);
+    }
+
+    if (closePaymentModal) {
+        closePaymentModal.addEventListener('click', hidePaymentModal);
+    }
+
+    if (closeSuccessModal) {
+        closeSuccessModal.addEventListener('click', () => {
+            hideSuccessModal();
+            resetPaymentForm();
+        });
     }
 
     if (newsletterForm) {

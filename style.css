@@ -1735,3 +1735,251 @@ footer h3 {
     }
 
 }
+
+/* =========================
+   MODAL DE PAGO
+========================= */
+
+.payment-modal,
+.success-modal {
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, .55);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity .3s ease, visibility .3s ease;
+    z-index: 10000;
+}
+
+.payment-modal.show,
+.success-modal.show {
+    opacity: 1;
+    visibility: visible;
+}
+
+.payment-modal-content,
+.success-modal-content {
+    background: white;
+    border-radius: 28px;
+    padding: 40px;
+    max-width: 600px;
+    width: 90%;
+    max-height: 90vh;
+    overflow-y: auto;
+    box-shadow: 0 30px 80px rgba(0, 0, 0, .25);
+}
+
+.payment-modal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 30px;
+    border-bottom: 1px solid rgba(223, 186, 115, .18);
+    padding-bottom: 20px;
+}
+
+.payment-modal-header h2 {
+    font-size: 1.65rem;
+    color: #2f1b14;
+    margin: 0;
+}
+
+.close-modal {
+    border: none;
+    background: rgba(47, 27, 20, .08);
+    color: #2f1b14;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    cursor: pointer;
+    font-size: 1.4rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background .2s ease;
+}
+
+.close-modal:hover {
+    background: rgba(47, 27, 20, .15);
+}
+
+.payment-form {
+    display: flex;
+    flex-direction: column;
+    gap: 25px;
+}
+
+.form-section h3 {
+    font-size: 1.1rem;
+    color: #2f1b14;
+    margin: 0 0 18px 0;
+    border-bottom: 2px solid #dfba73;
+    padding-bottom: 12px;
+}
+
+.form-group {
+    display: flex;
+    flex-direction: column;
+}
+
+.form-group label {
+    color: #4a7c59;
+    font-weight: 600;
+    margin-bottom: 8px;
+    font-size: 0.95rem;
+}
+
+.form-group input {
+    padding: 12px 16px;
+    border: 1px solid rgba(223, 186, 115, .3);
+    border-radius: 12px;
+    font-family: 'Poppins', sans-serif;
+    font-size: 0.95rem;
+    color: #2f1b14;
+    background: #faf8f4;
+    transition: border-color .2s ease, background .2s ease;
+}
+
+.form-group input:focus {
+    outline: none;
+    border-color: #dfba73;
+    background: white;
+}
+
+.form-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 15px;
+}
+
+.payment-submit {
+    margin-top: 10px;
+    padding: 15px;
+    font-size: 1rem;
+    cursor: pointer;
+    border: none;
+    transition: transform .2s ease, box-shadow .2s ease;
+}
+
+.payment-submit:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 12px 30px rgba(223, 186, 115, .3);
+}
+
+.payment-submit:active {
+    transform: translateY(0);
+}
+
+/* =========================
+   MODAL DE CONFIRMACIÓN
+========================= */
+
+.success-modal-content {
+    text-align: center;
+    padding: 50px 40px;
+}
+
+.success-icon {
+    width: 80px;
+    height: 80px;
+    background: linear-gradient(135deg, #4a7c59 0%, #2f5a3f 100%);
+    color: white;
+    font-size: 3rem;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto 25px;
+    animation: successPop .5s ease;
+}
+
+@keyframes successPop {
+    0% {
+        transform: scale(0);
+        opacity: 0;
+    }
+
+    50% {
+        transform: scale(1.1);
+    }
+
+    100% {
+        transform: scale(1);
+        opacity: 1;
+    }
+}
+
+.success-modal-content h2 {
+    font-size: 1.8rem;
+    color: #2f1b14;
+    margin: 0 0 15px 0;
+}
+
+.success-modal-content p {
+    color: #5f4a3d;
+    line-height: 1.7;
+    margin: 0 0 20px 0;
+}
+
+.order-number {
+    background: #f5e6d8;
+    padding: 15px;
+    border-radius: 12px;
+    margin: 20px 0;
+    color: #2f1b14;
+    font-weight: 600;
+}
+
+.order-number strong {
+    color: #4a7c59;
+    font-size: 1.15rem;
+}
+
+.success-modal-content .btn-primary {
+    margin-top: 20px;
+    display: inline-block;
+    padding: 15px 35px;
+    border: none;
+    cursor: pointer;
+    transition: transform .2s ease, box-shadow .2s ease;
+}
+
+.success-modal-content .btn-primary:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 12px 30px rgba(223, 186, 115, .3);
+}
+
+/* =========================
+   RESPONSIVE MODALES
+========================= */
+
+@media(max-width:768px) {
+
+    .payment-modal-content,
+    .success-modal-content {
+        max-width: 95%;
+        padding: 30px 20px;
+    }
+
+    .payment-modal-header h2 {
+        font-size: 1.4rem;
+    }
+
+    .form-row {
+        grid-template-columns: 1fr;
+    }
+
+    .newsletter form {
+
+        flex-direction: column;
+    }
+
+    .newsletter input {
+
+        width: 100%;
+    }
+
+}
