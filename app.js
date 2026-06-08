@@ -194,6 +194,22 @@ document.addEventListener('DOMContentLoaded', () => {
     const closePaymentModal = document.getElementById('closePaymentModal');
     const successModal = document.getElementById('successModal');
     const closeSuccessModal = document.getElementById('closeSuccessModal');
+    const cardExpiryInput = document.getElementById('cardExpiry');
+
+    const formatCardExpiry = (value) => {
+        const digits = value.replace(/\D/g, '');
+        if (digits.length <= 2) {
+            return digits;
+        }
+        return `${digits.slice(0, 2)}/${digits.slice(2, 4)}`;
+    };
+
+    if (cardExpiryInput) {
+        cardExpiryInput.addEventListener('input', (event) => {
+            const formattedValue = formatCardExpiry(event.target.value);
+            event.target.value = formattedValue;
+        });
+    }
 
     const showPaymentModal = () => {
         if (paymentModal) {
